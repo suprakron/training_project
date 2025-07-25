@@ -1,35 +1,279 @@
-<!-- templates/employees/employee_list.html -->
-<h2>📋 รายชื่อพนักงาน</h2>
-<a href="{% url 'add_employee' %}" class="button">➕ เพิ่มพนักงาน</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
 
+<head>
+  <meta charset="UTF-8" />
+  <title>ระบบจัดการพนักงานและหลักสูตร</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<table>
-  <thead>
-    <tr>
-      <th>รหัส</th>
-      <th>ตำแหน่ง</th>
-      <th>ชื่อ</th>
-      <th>ไฟล์หลักฐาน</th>
-      <th>ดูประวัติการอบรม</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for employee in employees %}
-    <tr>
-      <td>{{ employee.employee_code }}</td>
-      <td>{{ employee.position }}</td>
-      <td>{{ employee.name }}</td>
-      <td>
-        {% if employee.certificate %}
-          <a href="{{ employee.certificate.url }}" target="_blank" class="button">ดูหลักฐาน</a>
-        {% else %}
-          ไม่มีไฟล์
-        {% endif %}
-      </td>
-      <td><a href="{% url 'employee_detail' employee.id %}" class="button">ดูประวัติ</a></td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="5" style="text-align:center;">ยังไม่มีพนักงาน</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: #f4f6fa;
+      color: #2c3e50;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    header {
+      background: #0d6efd;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin: 30px 0 15px;
+      color: #0d6efd;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    thead th {
+      background-color: #e9ecef;
+      color: #495057;
+      padding: 12px 16px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      text-align: center;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f3f5;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #0d6efd;
+    }
+
+    .button,
+    .edit-button,
+    .delete-icon {
+      display: inline-block;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .button {
+      background-color: #0d6efd;
+    }
+
+    .edit-button {
+      background-color: #198754;
+    }
+
+    .delete-icon {
+      background-color: #dc3545;
+    }
+
+    .button:hover,
+    .edit-button:hover,
+    .delete-icon:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    .no-data {
+      color: #adb5bd;
+      font-style: italic;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #0d6efd;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      header,
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>ระบบจัดการพนักงานและหลักสูตร</h1>
+    <nav>
+      <a href="{% url 'index' %}"><i class="fas fa-home"></i> หน้าแรก</a>
+      <a href="{% url 'add_employee' %}"><i class="fas fa-user-plus"></i> เพิ่มพนักงาน</a>
+      <a href="{% url 'course_manage' %}"><i class="fas fa-book"></i> จัดการหลักสูตร</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>📋 รายชื่อพนักงาน</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>รหัส</th>
+          <th>ตำแหน่ง</th>
+          <th>ชื่อ</th>
+          <th>รูปภาพ</th>
+          <th>ทักษะ</th>
+          <th>หลักฐาน</th>
+          <th>ประวัติอบรม</th>
+          <th>แก้ไข</th>
+          <th>ลบ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for employee in employees %}
+        <tr>
+          <td>{{ employee.employee_code }}</td>
+          <td>{{ employee.position }}</td>
+          <td>{{ employee.name }}</td>
+          <td>
+            {% if employee.photo %}<img src="{{ employee.photo.url }}" alt="รูปของ {{ employee.name }}">{% else %}<span class="no-data">ไม่มีรูป</span>{% endif %}
+          </td>
+          <td>{% if employee.skills %}{{ employee.skills|linebreaksbr }}{% else %}<span class="no-data">ไม่มีทักษะ</span>{% endif %}</td>
+          <td>
+            {% if employee.certificate %}
+            <a href="{{ employee.certificate.url }}" target="_blank" class="button"><i class="fas fa-file-pdf"></i> ดูหลักฐาน</a>
+            {% else %}<span class="no-data">ไม่มีไฟล์</span>{% endif %}
+          </td>
+          <td><a href="{% url 'employee_detail' employee.id %}" class="button"><i class="fas fa-history"></i> ประวัติ</a></td>
+          <td><a href="{% url 'employee_edit' employee.id %}" class="edit-button"><i class="fas fa-pen"></i> แก้ไข</a></td>
+          <td><a href="javascript:void(0);" onclick="confirmDelete(this)" data-url="{% url 'employee_delete' employee.id %}" class="delete-icon"><i class="fas fa-trash-alt"></i> ลบ</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="no-data">ยังไม่มีพนักงาน</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>📘 รายการหลักสูตร</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>รหัสหลักสูตร</th>
+          <th>ชื่อหลักสูตร</th>
+          <th>รายละเอียด</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+        <tr>
+          <td>{{ course.code }}</td>
+          <td>{{ course.name }}</td>
+          <td>{{ course.description }}</td>
+          <td>
+            <a href="{% url 'edit_course' course.id %}" class="edit-button"><i class="fas fa-pen"></i> แก้ไข</a>
+            <a href="javascript:void(0);" onclick="confirmDelete(this)" data-url="{% url 'delete_course' course.id %}" class="delete-icon"><i class="fas fa-trash"></i> ลบ</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="no-data">ยังไม่มีหลักสูตร</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    &copy; 2025 ระบบจัดการพนักงาน 
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function confirmDelete(button) {
+      Swal.fire({
+        title: 'ยืนยันการลบ?',
+        text: "คุณต้องการลบข้อมูลนี้จริงหรือไม่?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'ลบ',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = button.getAttribute('data-url');
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

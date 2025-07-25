@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>แก้ไขหลักสูตร</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header,
+        footer {
+            background-color: #34495e;
+            color: #fff;
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        main.container {
+            flex: 1;
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 50px 40px;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h2 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        form label {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        form input,
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background: #fdfdfd;
+            transition: all 0.3s ease;
+        }
+
+        form input:focus,
+        form textarea:focus,
+        form select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        button {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.2rem;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #2c3e50;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #2980b9;
+        }
+
+        footer {
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main.container {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            button {
+                font-size: 1rem;
+                padding: 12px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>ระบบจัดการหลักสูตร</h1>
+    </header>
+
+    <main class="container">
+        <h2><i class="fa-solid fa-pen-to-square"></i> แก้ไขหลักสูตร</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="form-actions">
+                <button type="submit"><i class="fa-solid fa-save"></i> บันทึกการแก้ไข</button>
+                <a href="{% url 'index' %}" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i> กลับหน้าแรก
+                </a>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        &copy; 2025 ระบบจัดการพนักงาน  
+    </footer>
+
+</body>
+
+</html>

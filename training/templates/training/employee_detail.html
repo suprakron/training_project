@@ -1,35 +1,144 @@
-<!-- templates/employee_detail.html -->
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <title>ประวัติการอบรมของ {{ employee.name }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body { font-family: 'Sarabun', sans-serif; padding: 20px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: #eef6fb;
+      margin: 0;
+      padding: 60px 30px 100px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0369a1;
+      margin-bottom: 40px;
+      font-size: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      background-color: #0284c7;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f1f5f9;
+    }
+
+    tr:hover {
+      background-color: #e0f2fe;
+    }
+
+    a.button {
+      display: inline-block;
+      margin: 20px 10px 0;
+      text-decoration: none;
+      background-color: #0ea5e9;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    a.button:hover {
+      background-color: #0284c7;
+    }
+
+    .cert-icon {
+      color: #10b981;
+    }
+
+    .cert-icon.missing {
+      color: #9ca3af;
+    }
+
+    .no-training {
+      text-align: center;
+      padding: 30px;
+      font-style: italic;
+      color: #6b7280;
+    }
+
+    .button-group {
+      text-align: center;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
-  <h1>ประวัติการอบรมของ {{ employee.name }}</h1>
+
+  <h1><i class="fa-solid fa-user-graduate"></i> ประวัติการอบรมของ {{ employee.name }}</h1>
+
+  {% if trainings %}
   <table>
     <thead>
       <tr>
         <th>รหัสหลักสูตร</th>
         <th>ชื่อหลักสูตร</th>
-        <th>รายละเอียด</th>
+        <th>สถานะ</th>
+        <th>ใบรับรอง</th>
       </tr>
     </thead>
     <tbody>
-      {% for course in courses %}
+      {% for training in trainings %}
       <tr>
-        <td>{{ course.code }}</td>
-        <td>{{ course.name }}</td>
-        <td>{{ course.description }}</td>
+        <td>{{ training.course.code }}</td>
+        <td>{{ training.course.name }}</td>
+        <td>
+          {% if training.passed %}
+            <span style="color: #16a34a;">ผ่าน</span>
+          {% else %}
+            <span style="color: #dc2626;">ไม่ผ่าน</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if training.certificate %}
+            <a href="{{ training.certificate.url }}" target="_blank">
+              <i class="fa-solid fa-file-pdf cert-icon"></i>
+            </a>
+          {% else %}
+            <i class="fa-solid fa-file cert-icon missing" title="ไม่มีไฟล์"></i>
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-  <p><a href="{% url 'index' %}">← กลับหน้าแรก</a></p>
+  {% else %}
+    <div class="no-training">ไม่มีประวัติการอบรม</div>
+  {% endif %}
+
+  <div class="button-group">
+    <a href="{% url 'add_training' %}" class="button">
+      <i class="fa-solid fa-plus"></i> เพิ่มการอบรม
+    </a>
+    <a href="{% url 'index' %}" class="button">
+      <i class="fa-solid fa-arrow-left"></i> กลับหน้าแรก
+    </a>
+  </div>
+
 </body>
 </html>

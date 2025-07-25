@@ -1,199 +1,250 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8" />
-  <title>จัดการหลักสูตร</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>📚 จัดการหลักสูตร</title>
   <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome CDN (สำหรับไอคอนถังขยะ) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+
   <style>
-    /* ฟ้อนต์และพื้นหลัง */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Sarabun', sans-serif;
-      background: #f0f4f8;
+
       margin: 0;
-      padding: 20px;
-      color: #333;
+      padding: 40px 20px;
+      color: #2c3e50;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
     }
 
     h1 {
-      color: #2c3e50;
-      margin-bottom: 30px;
+      font-size: 2.8rem;
       font-weight: 700;
-      text-align: center;
+      color: #1565c0;
+      margin-bottom: 40px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      user-select: none;
     }
 
-    /* ฟอร์มเพิ่มหลักสูตร */
+    /* Form Container */
     form {
-      background: white;
-      padding: 25px 30px;
-      max-width: 500px;
-      margin: 0 auto 40px auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      box-sizing: border-box;
+      padding: 35px 40px;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(21, 101, 192, 0.15);
+      transition: box-shadow 0.3s ease;
+      background-color: #fff;
+    }
+
+    form:hover {
+      box-shadow: 0 25px 50px rgba(21, 101, 192, 0.3);
     }
 
     form label {
       display: block;
-      margin-bottom: 15px;
       font-weight: 600;
-      color: #34495e;
+      font-size: 1.15rem;
+      color: #0d47a1;
+      margin-bottom: 10px;
+      margin-top: 25px;
+      user-select: none;
     }
 
-    form input[type="text"],
-    form textarea {
+    input[type="text"],
+    textarea {
       width: 100%;
-      padding: 10px 12px;
-      border: 1.8px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-      transition: border-color 0.3s ease;
+      padding: 14px 18px;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 2px solid #cfd8dc;
+      background-color: #f9fafb;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
       resize: vertical;
-      box-sizing: border-box;
+      font-weight: 400;
+      color: #37474f;
     }
 
-    form input[type="text"]:focus,
-    form textarea:focus {
-      border-color: #3498db;
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #1976d2;
       outline: none;
-      box-shadow: 0 0 6px #a3c9f9;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(25, 118, 210, 0.3);
     }
 
-    form button {
-      display: block;
-      margin: 25px auto 0 auto;
-      padding: 12px 30px;
-      background-color: #3498db;
+    button[type="submit"] {
+      margin-top: 35px;
+      width: 100%;
+      padding: 15px 0;
+      background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
       color: white;
-      border: none;
-      border-radius: 50px;
-      font-size: 18px;
+      font-size: 1.25rem;
       font-weight: 700;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(25, 118, 210, 0.4);
       cursor: pointer;
-      box-shadow: 0 5px 12px rgba(52,152,219,0.4);
-      transition: background-color 0.3s ease;
+      transition: background 0.4s ease, transform 0.2s ease;
+      user-select: none;
     }
 
-    form button:hover {
-      background-color: #2980b9;
+    button[type="submit"]:hover {
+      background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
+      transform: scale(1.05);
     }
 
-    /* รายการหลักสูตร */
+    /* Table Styling */
     h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #34495e;
+      margin-top: 60px;
+      font-size: 2rem;
       font-weight: 700;
+      color: #1565c0;
+      user-select: none;
     }
 
-    ul {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 0;
-      list-style: none;
+    table {
+      width: 100%;
+      max-width: 700px;
+      margin: 30px auto 0 auto;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(21, 101, 192, 0.1);
     }
 
-    ul li {
-      background: white;
-      margin-bottom: 15px;
-      padding: 20px 25px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-sizing: border-box;
+    thead tr {
+      background-color: #1976d2;
+      color: #fff;
+      user-select: none;
     }
 
-    ul li strong {
-      font-size: 18px;
-      color: #2c3e50;
-      flex: 1;
+    th,
+    td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
     }
 
-    ul li > div {
-      flex: 2;
-      margin-left: 20px;
-      color: #555;
-      font-size: 15px;
-      white-space: pre-wrap;
-    }
-
-    /* ปุ่มลบ */
-    ul li form {
-      margin: 0;
-    }
-
-    ul li button {
-      background-color: #e74c3c;
-      border: none;
-      color: white;
-      padding: 8px 14px;
-      font-size: 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(231,76,60,0.4);
+    tbody tr:hover {
+      background-color: #f1f8ff;
+      cursor: default;
       transition: background-color 0.3s ease;
     }
 
-    ul li button:hover {
-      background-color: #c0392b;
+    td:last-child {
+      text-align: center;
+      width: 80px;
+    }
+
+    a.delete-icon {
+      color: #e53935;
+      font-size: 20px;
+      transition: color 0.3s ease;
+      display: inline-block;
+      user-select: none;
+    }
+
+    a.delete-icon:hover {
+      color: #b71c1c;
     }
 
     /* Responsive */
-    @media (max-width: 600px) {
-      form, ul {
-        width: 90%;
-        margin: 0 auto 30px auto;
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
       }
 
-      ul li {
-        flex-direction: column;
-        align-items: flex-start;
+      form {
+        padding: 25px 20px;
       }
 
-      ul li > div {
-        margin-left: 0;
-        margin-top: 8px;
+      table,
+      thead tr,
+      tbody tr,
+      th,
+      td {
+        display: block;
+        width: 100%;
+      }
+
+      thead tr {
+        display: none;
+      }
+
+      tbody tr {
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(21, 101, 192, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        background-color: #fff;
+      }
+
+      td {
+        padding: 10px 15px;
+        border-bottom: none;
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: 600;
+        color: #1976d2;
+        text-align: left;
+      }
+
+      td:last-child {
+        text-align: right;
+        padding-left: 15px;
       }
     }
   </style>
 </head>
+
 <body>
+
   <h1>📚 จัดการหลักสูตร</h1>
 
   <form method="post" novalidate>
     {% csrf_token %}
     <label>รหัสหลักสูตร:
-      <input type="text" name="code" placeholder="เช่น C001" required />
+      <input type="text" name="code"   required />
     </label>
 
     <label>ชื่อหลักสูตร:
-      <input type="text" name="name" placeholder="ชื่อหลักสูตร" required />
+      <input type="text" name="name"  required />
     </label>
 
     <label>รายละเอียด:
-      <textarea name="description" rows="3" placeholder="รายละเอียดเพิ่มเติม"></textarea>
+      <textarea name="description" rows="3" ></textarea>
     </label>
 
     <button type="submit">💾 บันทึกหลักสูตร</button>
   </form>
 
-  <h2>📋 รายการหลักสูตร</h2>
-  <ul>
-    {% for course in courses %}
-      <li>
-        <strong>{{ course.code }} - {{ course.name }}</strong>
-        <div>{{ course.description }}</div>
-        <form method="post" action="{% url 'delete_course' course.id %}" style="margin-left: 20px;">
-          {% csrf_token %}
-          <button type="submit" title="ลบหลักสูตร">❌ ลบ</button>
-        </form>
-      </li>
-    {% empty %}
-      <li style="text-align:center; color:#999;">ยังไม่มีหลักสูตร</li>
-    {% endfor %}
-  </ul>
+ 
 
 </body>
+
 </html>
