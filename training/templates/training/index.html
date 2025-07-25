@@ -1,0 +1,35 @@
+<!-- templates/employees/employee_list.html -->
+<h2>📋 รายชื่อพนักงาน</h2>
+<a href="{% url 'add_employee' %}" class="button">➕ เพิ่มพนักงาน</a>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>รหัส</th>
+      <th>ตำแหน่ง</th>
+      <th>ชื่อ</th>
+      <th>ไฟล์หลักฐาน</th>
+      <th>ดูประวัติการอบรม</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for employee in employees %}
+    <tr>
+      <td>{{ employee.employee_code }}</td>
+      <td>{{ employee.position }}</td>
+      <td>{{ employee.name }}</td>
+      <td>
+        {% if employee.certificate %}
+          <a href="{{ employee.certificate.url }}" target="_blank" class="button">ดูหลักฐาน</a>
+        {% else %}
+          ไม่มีไฟล์
+        {% endif %}
+      </td>
+      <td><a href="{% url 'employee_detail' employee.id %}" class="button">ดูประวัติ</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" style="text-align:center;">ยังไม่มีพนักงาน</td></tr>
+    {% endfor %}
+  </tbody>
+</table>

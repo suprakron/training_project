@@ -1,0 +1,17 @@
+<!-- templates/training/course_form.html -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+</head>
+<body>
+  <h1>{{ title }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">บันทึก</button>
+  </form>
+  <a href="{% url 'course_manage' %}">← กลับ</a>
+</body>
+</html>

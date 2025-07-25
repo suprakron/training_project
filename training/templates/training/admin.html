@@ -1,0 +1,49 @@
+<!-- templates/admin.html -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>จัดการหลักสูตร</title>
+  <style>
+    body { font-family: 'Sarabun', sans-serif; padding: 20px; }
+    form input, textarea { display: block; margin-bottom: 10px; width: 300px; padding: 8px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; }
+    .button { padding: 5px 10px; border: none; border-radius: 4px; background: #27ae60; color: white; }
+    .delete-button { background: #e74c3c; }
+  </style>
+</head>
+<body>
+  <h1>จัดการหลักสูตร</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label>รหัสหลักสูตร:</label>
+    <input type="text" name="code" required>
+    <label>ชื่อหลักสูตร:</label>
+    <input type="text" name="name" required>
+    <label>รายละเอียด:</label>
+    <textarea name="description" required></textarea>
+    <button type="submit" class="button">เพิ่มหลักสูตร</button>
+  </form>
+
+  <h2>รายการหลักสูตรทั้งหมด</h2>
+  <table>
+    <tr>
+      <th>รหัส</th><th>ชื่อ</th><th>รายละเอียด</th><th>ลบ</th>
+    </tr>
+    {% for course in courses %}
+    <tr>
+      <td>{{ course.code }}</td>
+      <td>{{ course.name }}</td>
+      <td>{{ course.description }}</td>
+      <td>
+        <form method="post" action="{% url 'delete_course' course.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="delete-button">ลบ</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

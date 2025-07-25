@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>➕ เพิ่มพนักงาน</title>
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(to right, #f0f4f8, #ffffff);
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h2 {
+      color: #2c3e50;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    form {
+      background-color: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 500px;
+    }
+
+    form p {
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(to right, #4CAF50, #2ecc71);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    button[type="submit"]:hover {
+      background: linear-gradient(to right, #43a047, #27ae60);
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 1.5rem;
+      text-decoration: none;
+      background-color: #3498db;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 0.5rem;
+      transition: background 0.3s ease;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    a:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>➕ เพิ่มพนักงาน</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">💾 เพิ่มพนักงาน</button>
+  </form>
+
+  <a href="{% url 'index' %}">🔙 กลับหน้าหลัก</a>
+
+</body>
+</html>

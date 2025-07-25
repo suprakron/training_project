@@ -1,0 +1,17 @@
+<!-- templates/training/course_confirm_delete.html -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ลบหลักสูตร</title>
+</head>
+<body>
+  <h1>ยืนยันลบหลักสูตร</h1>
+  <p>คุณแน่ใจว่าต้องการลบ "{{ course.name }}" ใช่หรือไม่?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">ลบ</button>
+    <a href="{% url 'course_manage' %}">ยกเลิก</a>
+  </form>
+</body>
+</html>
